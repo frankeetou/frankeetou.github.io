@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <!-- jsPDF and html2canvas for PDF generation -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('section').forEach(function(section) {
+            const header = section.querySelector('h2');
+            if (!header) return;
+            section.classList.add('collapsed');
+            header.classList.add('collapsible-header');
+            header.addEventListener('click', function() {
+                const isCollapsed = section.classList.toggle('collapsed');
+                if (!isCollapsed) {
+                    section.classList.add('lighting-expand');
+                    setTimeout(() => section.classList.remove('lighting-expand'), 600);
+                }
+            });
+        });
+    });
+
+    function printCV() {
+        // 1. Force-expand every section by removing collapsed class
+        //    AND inline-style the content so no CSS transition can delay it
+        var restored = [];
+        document.querySelectorAll('section').forEach(function(s) {
+            var content = s.querySelector('.collapsible-content');
+            if (content) {
+                var prev = content.getAttribute('style') || '';
+                content.setAttribute('style', 'max-height:none!important;overflow:visible!important;opacity:1!important;transition:none!important;');
+                restored.push({ el: content, style: prev });
+            }
+            if (s.classList.contains('collapsed')) {
+                s.classList.remove('collapsed');
+                restored.push({ el: s, cls: 'collapsed' });
+            }
+        });
+        // 2. Force a synchronous reflow so the browser sees the expanded layout
+        document.body.offsetHeight;
+        // 3. Print
+        window.print();
+        // 4. Restore everything
+        restored.forEach(function(item) {
+            if (item.cls) {
+                item.el.classList.add(item.cls);
+            } else {
+                item.el.setAttribute('style', item.style);
+            }
+        });
+    }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QA Engineer - Virtual CV</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+        <!-- Sidebar and main-layout removed, restoring original layout -->
+    <header>
+        <div class="animation-container">
+            <!-- QA CI/CD Pipeline animation -->
+            <svg class="qa-pipeline-svg" width="440" height="80" viewBox="0 0 440 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Stage 1: UNIT -->
+                <rect class="pipe-stage ps1" x="10" y="12" width="82" height="38" rx="5"/>
+                <text x="51" y="28" class="pipe-label" text-anchor="middle">UNIT</text>
+                <text x="51" y="42" class="pipe-sublabel" text-anchor="middle">tests</text>
+                <text class="pipe-check pc1" x="51" y="64" text-anchor="middle">✓ pass</text>
+                <!-- Connector 1 -->
+                <line x1="92" y1="31" x2="116" y2="31" class="pipe-connector"/>
+                <polyline points="112,27 120,31 112,35" class="pipe-arrow"/>
+                <!-- Stage 2: INTG -->
+                <rect class="pipe-stage ps2" x="120" y="12" width="82" height="38" rx="5"/>
+                <text x="161" y="28" class="pipe-label" text-anchor="middle">INTG</text>
+                <text x="161" y="42" class="pipe-sublabel" text-anchor="middle">tests</text>
+                <text class="pipe-check pc2" x="161" y="64" text-anchor="middle">✓ pass</text>
+                <!-- Connector 2 -->
+                <line x1="202" y1="31" x2="226" y2="31" class="pipe-connector"/>
+                <polyline points="222,27 230,31 222,35" class="pipe-arrow"/>
+                <!-- Stage 3: E2E -->
+                <rect class="pipe-stage ps3" x="230" y="12" width="82" height="38" rx="5"/>
+                <text x="271" y="28" class="pipe-label" text-anchor="middle">E2E</text>
+                <text x="271" y="42" class="pipe-sublabel" text-anchor="middle">tests</text>
+                <text class="pipe-check pc3" x="271" y="64" text-anchor="middle">✓ pass</text>
+                <!-- Connector 3 -->
+                <line x1="312" y1="31" x2="336" y2="31" class="pipe-connector"/>
+                <polyline points="332,27 340,31 332,35" class="pipe-arrow"/>
+                <!-- Stage 4: SHIP -->
+                <rect class="pipe-stage ps4" x="340" y="12" width="82" height="38" rx="5"/>
+                <text x="381" y="28" class="pipe-label" text-anchor="middle">SHIP</text>
+                <text x="381" y="42" class="pipe-sublabel" text-anchor="middle">🚀</text>
+                <text class="pipe-check pc4" x="381" y="64" fill="#c400cc" text-anchor="middle">✓ live</text>
+                <!-- Flowing particle -->
+                <circle class="pipe-particle" cx="51" cy="31" r="5"/>
+            </svg>
+        </div>
+        <img src="assets/franco-profile.jpeg" alt="Franco Bianucci profile photo" class="profile-pic">
+        <h1>Franco Bianucci</h1>
+        <div class="sub-heading">
+            Sr. QA Automation Engineer | Testing Consultant<br>
+            Argentina
+        </div>
+    </header>
+    <!-- Print-only Technical Skills: always visible in PDF, hidden on web -->
+    <div class="print-only-skills">
+        <h2>Technical Skills</h2>
+        <ul>
+            <li><strong>Test Automation:</strong> Playwright, Selenium, Cypress, Robot Framework, Provar, Cucumber, Behat, Visual Regression Testing</li>
+            <li><strong>AI &amp; Automation:</strong> Claude-code, Codex, .md &amp; context files for agents, AI-driven test case generation</li>
+            <li><strong>Salesforce Automation:</strong> API &amp; UI automated testing</li>
+            <li><strong>Manual &amp; Exploratory Testing:</strong> Regression, UAT, Accessibility, Performance</li>
+            <li><strong>Bug Tracking:</strong> Jira, ADO, Zephyr, TestRail, Testlink, ALM, Quality Center</li>
+            <li><strong>CI/CD:</strong> Jenkins, Bamboo, CircleCI, GitHub Actions, Bitbucket, ADO Pipelines</li>
+            <li><strong>API Testing:</strong> Postman, REST, SoapUI, Newman</li>
+            <li><strong>Version Control:</strong> Git, Bitbucket, SourceTree</li>
+            <li><strong>Performance:</strong> JMeter, Charles Proxy</li>
+            <li><strong>Mobile:</strong> TestFlight, TestFairy, iOS, Android</li>
+            <li><strong>Other Tools:</strong> Browserstack, Percy, Deque AXE, Genymotion</li>
+        </ul>
+    </div>
+    <div class="print-bar">
+        <span class="print-bar-text">💼 Not feeling the neon? Get a clean, classic PDF version</span>
+        <button class="print-bar-btn" onclick="printCV()">Download PDF →</button>
+    </div>
+    <section>
+        <h2>Summary</h2>
+        <div class="collapsible-content">
+        <p>Senior QA Engineer and leader with 14+ years of experience driving quality across complex, high-impact software systems. I excel at owning the end-to-end testing process—from strategy and automation frameworks to risk analysis, release confidence, and cross-team alignment. My approach is to test smarter, not just more: focusing on what matters most to the business and proactively preventing production issues.<br>
+        I have led QA initiatives for high-traffic, mission-critical platforms, collaborating closely with Engineering, Product, and Leadership to balance speed, stability, and scalability. My expertise blends deep hands-on automation and E2E testing with a strategic leadership mindset, enabling teams to deliver faster without compromising reliability.<br>
+        In today’s AI-driven development landscape, I view testing as a strategic function: AI accelerates execution, but elevates the importance of deciding what truly needs to be tested.</p>
+        </div>
+    </section>
+    <section class="print-hide">
+        <h2>Technical Skills</h2>
+        <div class="collapsible-content">
+        <ul>
+            <li><strong>Test Automation:</strong> Playwright, Selenium, Cypress, Robot Framework, Provar, Cucumber, Behat, Visual Regression Testing</li>
+            <li><strong>AI & Automation:</strong> Claude-code, Codex, .md & context files for agents, AI-driven test case generation</li>
+            <li><strong>Salesforce Automation:</strong> API & UI automated testing</li>
+            <li><strong>Manual & Exploratory Testing:</strong> Regression, UAT, Accessibility, Performance</li>
+            <li><strong>Bug Tracking:</strong> Jira, ADO, Zephyr, TestRail, Testlink, ALM, Quality Center</li>
+            <li><strong>CI/CD:</strong> Jenkins, Bamboo, CircleCI, GitHub Actions, Bitbucket, ADO Pipelines</li>
+            <li><strong>API Testing:</strong> Postman, REST, SoapUI, Newman</li>
+            <li><strong>CMS:</strong> Drupal, Wordpress, AEM</li>
+            <li><strong>Version Control:</strong> Git, Bitbucket, SourceTree</li>
+            <li><strong>Performance:</strong> JMeter, Charles Proxy</li>
+            <li><strong>Mobile:</strong> TestFlight, TestFairy, iOS, Android</li>
+            <li><strong>Other Tools:</strong> Browserstack, Percy, Deque AXE, Genymotion</li>
+        </ul>
+        </div>
+    </section>
+    <section>
+        <h2>Experience</h2>
+        <div class="collapsible-content experience-timeline">
+            <div class="exp-box">
+                <div class="exp-years">2024 - Present</div>
+                <div class="exp-details">
+                    <h3>Blackthorn.io — Sr. QA Engineer</h3>
+                    <ul>
+                        <li>Lead end-to-end QA for Salesforce solutions, mobile apps, and microservices-based APIs, ensuring robust quality at every stage.</li>
+                        <li>Architect and maintain AI-powered test automation frameworks with Playwright, transforming .md specifications into scalable, maintainable coverage.</li>
+                        <li>Design and implement CI/CD pipelines for automated, reliable, and repeatable deployments.</li>
+                        <li>Develop comprehensive test plans aligned with business and release goals.</li>
+                        <li>Integrate AI-driven workflows to accelerate test case generation, validation, and regression optimization.</li>
+                        <li>Conduct technical PR reviews focused on testability, risk mitigation, and automation impact.</li>
+                        <li>Own the defect lifecycle: triage, root cause analysis, and cross-team resolution.</li>
+                        <li>Embed QA risk analysis early in the SDLC through active participation in grooming and sprint planning.</li>
+                        <li>Drive risk assessment and release readiness across engineering, product, and stakeholders.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="exp-box">
+                <div class="exp-years">2023 - 2024</div>
+                <div class="exp-details">
+                    <h3>Outcoding — Sr. QA Automation Engineer | Salesforce</h3>
+                    <ul>
+                        <li>Developed and maintained test plans, strategies, and documentation, ensuring alignment with evolving requirements.</li>
+                        <li>Co-built a robust test automation framework using Page Object pattern, CCI, and Robot Framework libraries.</li>
+                        <li>Managed bug reporting, lifecycle tracking, and classification in collaboration with cross-functional teams.</li>
+                        <li>Supported go-live releases across multiple Salesforce clouds, ensuring smooth deployments.</li>
+                        <li>Authored and maintained QA best practices documentation.</li>
+                        <li>Championed Agile testing with ADO Pipelines and CI/CD integration.</li>
+                        <li>Owned testing environment management, leveraging CCI for scratch org creation and code updates.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="exp-box">
+                <div class="exp-years">2022 - 2023</div>
+                <div class="exp-details">
+                    <h3>Hero Digital — Quality Assurance Manager</h3>
+                    <ul>
+                        <li>Defined and shaped the company’s QA process and strategic direction.</li>
+                        <li>Designed career paths and growth opportunities for QA team members.</li>
+                        <li>Led recruitment, resource allocation, and team capacity planning.</li>
+                        <li>Drove tool analysis, selection, and implementation for QA initiatives.</li>
+                        <li>Executed automation PoCs for client projects, supporting production releases.</li>
+                        <li>Developed test execution reports and actionable quality metrics.</li>
+                        <li>Championed “Work Smart” initiatives to maximize testing efficiency in Agile SDLC.</li>
+                        <li>Defined department-wide test strategies and best practices.</li>
+                        <li>Managed team performance, personal goals, and professional growth.</li>
+                        <li>Worked with CMS (Drupal, Wordpress, AEM), e-commerce (Magento), visual automation (Cypress + Percy), and accessibility (Deque AXE).</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="exp-box">
+                <div class="exp-years">2021 - 2022</div>
+                <div class="exp-details">
+                    <h3>Katoo — Senior QA Engineer Lead</h3>
+                    <ul>
+                        <li>Led the QA team supporting multiple applications, projects, and releases.</li>
+                        <li>Defined testing strategy, plans, and “Definition of Done” at various SDLC levels.</li>
+                        <li>Managed resource allocation, training, and mentoring for junior QAs.</li>
+                        <li>Documented best practices and implemented a test management tool.</li>
+                        <li>Oversaw E2E, API, web, and mobile testing.</li>
+                        <li>Reported and communicated testing status, risks, and progress to stakeholders.</li>
+                        <li>Created API automation with Postman and integrated with CI/CD pipelines.</li>
+                        <li>Defined and managed bug reporting strategy and lifecycle with product teams.</li>
+                        <li>Created and monitored roadmaps for the tech team and QA Guild.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="exp-box">
+                <div class="exp-years">2018 - 2021</div>
+                <div class="exp-details">
+                    <h3>Rockstar Coders — Lead QA Engineer (Freelance)</h3>
+                    <ul>
+                        <li>Directed test planning, estimation, and exit criteria for multiple projects.</li>
+                        <li>Analyzed requirements, managed change requests, and ensured feature completeness with PMs and stakeholders.</li>
+                        <li>Created BDD and test scenarios in Cucumber Studio.</li>
+                        <li>Championed functional and UX improvements.</li>
+                        <li>Executed and reported on diverse test suites.</li>
+                        <li>Led bug review and prioritization sessions with product owners and technical leads.</li>
+                        <li>Supported production releases and coordinated group testing sessions.</li>
+                        <li>Deployed builds, monitored jobs, and implemented test management tools.</li>
+                        <li>Maintained Behat test scenarios and debugged automation scripts.</li>
+                        <li>Performed API, accessibility, and performance testing (JMeter), including dark mode implementation.</li>
+                        <li>Delivered clear test results and progress reports to stakeholders.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="exp-box">
+                <div class="exp-years">2015 - 2018</div>
+                <div class="exp-details">
+                    <h3>Santex — QA Lead</h3>
+                    <ul>
+                        <li>Led QA projects and strategies, including planning, resource allocation, and recruitment.</li>
+                        <li>Created onboarding roadmaps and coordinated team integration.</li>
+                        <li>Provided Agile testing consultancy and drove process improvements.</li>
+                        <li>Directed test planning, strategy, and QA process redesign.</li>
+                        <li>Implemented Agile testing and supported business analysts.</li>
+                        <li>Oversaw execution of diverse testing types and automation (API, performance, GUI, Salesforce with Provar).</li>
+                        <li>Established version control strategy for QA automation teams (Git & Bitbucket).</li>
+                        <li>Coordinated test environments, bug tracking, and reporting.</li>
+                        <li>Managed metrics and continuous tool research for quality improvement.</li>
+                        <li>Defined testing types from system/integration to acceptance and accessibility.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="exp-box">
+                <div class="exp-years">2013 - 2015</div>
+                <div class="exp-details">
+                    <h3>Santex — Sr. QA Analyst</h3>
+                    <ul>
+                        <li>Led Agile testing and QA for multiple projects, focusing on customer needs and strategy.</li>
+                        <li>Created and maintained test plans, cases, and management tools (Testrail, Testlink, Zephyr).</li>
+                        <li>Executed tests, reported bugs, and delivered QA metrics and reports.</li>
+                        <li>Developed and maintained automation scripts (Selenium, TestNG, Robot Framework).</li>
+                        <li>Performed business analysis, backlog creation, and requirements management.</li>
+                        <li>Researched and implemented QA process improvements.</li>
+                        <li>Executed functional, non-functional, regression, exploratory, API, GUI, and accessibility testing.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="exp-box">
+                <div class="exp-years">2011 - 2013</div>
+                <div class="exp-details">
+                    <h3>HP Enterprise Services — QA Analyst Ssr</h3>
+                    <ul>
+                        <li>Executed functional testing, test planning, and test case design for diverse projects.</li>
+                        <li>Analyzed requirements, resolved ambiguities, and drove operational improvements.</li>
+                        <li>Worked on Nextel Portability Number, Web Channel, and other high-impact projects.</li>
+                        <li>Utilized Quality Center 10 and ALM 11 for test execution and management.</li>
+                        <li>Estimated project scope and managed closure activities.</li>
+                        <li>Led Ally CARS Project: requirements analysis, test design, execution, and regression coordination.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="exp-box">
+                <div class="exp-years">2009 - 2011</div>
+                <div class="exp-details">
+                    <h3>Claro Argentina — International Roaming Testing</h3>
+                    <ul>
+                        <li>Coordinated and executed international roaming testing for multiple carriers.</li>
+                        <li>Liaised with IREG teams to ensure seamless cross-carrier operations.</li>
+                        <li>Produced detailed metrics, results, and analysis reports.</li>
+                        <li>Tracked issues and performed records analysis for continuous improvement.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="exp-box">
+                <div class="exp-years">2008 - 2009</div>
+                <div class="exp-details">
+                    <h3>CVAmedios — Media Analyst</h3>
+                    <ul>
+                        <li>Conducted media audits for diverse clients, including radio and TV.</li>
+                        <li>Analyzed news content and produced actionable reports.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <h2>Education</h2>
+        <div class="collapsible-content">
+        <ul>
+            <li>Licenciatura en Comunicación Social, Comunicación Institucional, Universidad Nacional de Córdoba (2003 - 2011)</li>
+            <li>Diplomatura en Gestión Cultural, Universidad Nacional de Córdoba (2008 - 2009)</li>
+            <li>Salesforce Certified Administrator</li>
+            <li>ISTQB Foundation Level</li>
+        </ul>
+        </div>
+    </section>
+    <section>
+        <h2>Beyond the Code</h2>
+        <div class="collapsible-content hobbies-grid">
+            <div class="hobby-card">
+                <div class="hobby-icon"><i class="fa-solid fa-drum"></i></div>
+                <div class="hobby-body">
+                    <h3>Drummer</h3>
+                    <p>Music has always been my second language. I've been playing drums for years — from rock and metal to jazz and funk. Keeping the rhythm on stage is not that different from keeping a release on track.</p>
+                </div>
+            </div>
+            <div class="hobby-card">
+                <div class="hobby-icon"><i class="fa-solid fa-futbol"></i></div>
+                <div class="hobby-body">
+                    <h3>Sport &amp; Travel</h3>
+                    <p>Football and padel are my go-to ways to stay competitive and connected. I also recharge by exploring new places — a good trip brings the same energy as a good match.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <section class="contact-section">
+            <h2>Contact</h2>
+            <div class="contact-info">
+                <div><i class="fa-brands fa-whatsapp contact-icon"></i><a href="https://wa.me/543515283854" class="contact-link" target="_blank">+54 351 528-3854</a></div>
+                <div><i class="fa-solid fa-envelope contact-icon"></i><a href="mailto:franco.bianucci@gmail.com" class="contact-link">franco.bianucci@gmail.com</a></div>
+                <div><i class="fa-brands fa-linkedin contact-icon"></i><a href="https://www.linkedin.com/in/franco-b-708b8b48" class="contact-link" target="_blank">linkedin.com/in/franco-b-708b8b48</a></div>
+            </div>
+        </section>
+        <p>© 2026 Franco Bianucci</p>
+    </footer>
+</body>
+</html>
